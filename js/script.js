@@ -118,16 +118,6 @@ document.getElementById("startBtn").addEventListener("click", () => goToChapter(
    ========================================================= */
 function setupCounter(){
   document.getElementById("bigNumber").textContent = CONFIG.turningAge;
-  if (!CONFIG.birthDate) return;
-  const birth = new Date(CONFIG.birthDate);
-  if (isNaN(birth)) return;
-  const now = new Date();
-  const ms = now - birth;
-  const days = Math.floor(ms / 86400000);
-  const hours = Math.floor(ms / 3600000);
-  document.getElementById("cDays").textContent = days.toLocaleString("es-ES");
-  document.getElementById("cHours").textContent = hours.toLocaleString("es-ES");
-  document.getElementById("counterRow").hidden = false;
 }
 setupCounter();
 
