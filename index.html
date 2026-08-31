@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Para ti — 22</title>
+<meta name="description" content="Una experiencia de cumpleaños, hecha para una persona muy especial.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Fondo compartido de estrellas / partículas -->
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+<!-- Estela del cursor -->
+<div id="cursor-trail" aria-hidden="true"></div>
+
+<!-- Reproductor de música -->
+<audio id="birthdayMusic" loop preload="none">
+  <source src="assets/music/song.mp3" type="audio/mpeg">
+</audio>
+<button id="musicToggle" class="music-player" aria-label="Reproducir música" aria-pressed="false">
+  <span class="music-icon">♫</span>
+  <span class="music-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+</button>
+
+<!-- Barra de progreso general de capítulos -->
+<nav class="chapter-dots" aria-label="Progreso de la experiencia">
+  <button data-go="intro" class="dot active" aria-label="Introducción"></button>
+  <button data-go="birthday" class="dot" aria-label="Cumpleaños"></button>
+  <button data-go="things" class="dot" aria-label="22 razones"></button>
+  <button data-go="wishes" class="dot" aria-label="22 deseos"></button>
+  <button data-go="gallery" class="dot" aria-label="Galería"></button>
+  <button data-go="letter" class="dot" aria-label="Carta"></button>
+  <button data-go="final" class="dot" aria-label="Final"></button>
+</nav>
+
+<main id="app">
+
+  <!-- 1. INTRO -->
+  <section id="intro" class="screen active" data-chapter="intro">
+    <div class="intro-stars" aria-hidden="true"></div>
+    <div class="screen-inner intro-inner fade-in">
+      <p class="pre-label">para una persona muy especial</p>
+      <h1 class="serif intro-title">Tengo algo<br>preparado para ti</h1>
+      <p class="intro-sub">No es un regalo que puedas envolver,<br>pero espero que te guste.</p>
+      <button class="btn btn-primary" id="startBtn">Abrir mi regalo</button>
+    </div>
+  </section>
+
+  <!-- 2. CUMPLEAÑOS -->
+  <section id="birthday" class="screen" data-chapter="birthday">
+    <div class="screen-inner fade-in">
+      <p class="pre-label">hoy es el día</p>
+      <h2 class="serif birthday-lead">Hoy alguien muy especial cumple</h2>
+      <div class="big-number" id="bigNumber">22</div>
+      <p class="birthday-copy">
+        Y aunque 22 pueda parecer solamente un número, hoy representa
+        veintidós años de una persona que merece celebrar todo lo bonito
+        que ha construido y todo lo bonito que todavía le queda por vivir.
+      </p>
+      <div id="counterRow" class="counter-row" hidden>
+        <div class="counter-item"><span id="cDays">—</span><small>días vividos</small></div>
+        <div class="counter-item"><span id="cHours">—</span><small>horas de historia</small></div>
+        <div class="counter-item"><span>∞</span><small>momentos por vivir</small></div>
+      </div>
+      <button class="btn btn-ghost next-btn" data-next="things">Continuar →</button>
+    </div>
+  </section>
+
+  <!-- 3. 22 COSAS -->
+  <section id="things" class="screen" data-chapter="things">
+    <div class="screen-inner things-inner fade-in">
+      <p class="pre-label">22 razones, entre muchas otras</p>
+      <h2 class="serif section-title">Cosas que te hacen tú</h2>
+
+      <div class="progress-track" aria-hidden="true">
+        <div class="progress-fill" id="thingsProgress"></div>
+      </div>
+
+      <div class="card-stage">
+        <button class="card-nav card-prev" id="cardPrev" aria-label="Anterior">‹</button>
+        <article class="thing-card" id="thingCard">
+          <span class="thing-number" id="thingNumber">01</span>
+          <h3 class="serif thing-title" id="thingTitle">—</h3>
+          <p class="thing-text" id="thingText">—</p>
+          <span class="thing-heart" aria-hidden="true">♡</span>
+        </article>
+        <button class="card-nav card-next" id="cardNext" aria-label="Siguiente">›</button>
+      </div>
+
+      <p class="card-count"><span id="cardCountCurrent">1</span> / 22</p>
+
+      <div class="things-end" id="thingsEnd" hidden>
+        <p class="serif reveal-line">Y después de 22 cosas...</p>
+        <p class="serif reveal-line reveal-delay">todavía me faltan muchísimas.</p>
+        <p class="reveal-note reveal-delay-2">Pero algunas cosas son mejores cuando simplemente se sienten.</p>
+        <button class="btn btn-ghost" data-next="wishes">Hay algo más para ti →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 22 DESEOS -->
+  <section id="wishes" class="screen" data-chapter="wishes">
+    <div class="screen-inner fade-in">
+      <p class="pre-label">y ahora, algo para ti</p>
+      <h2 class="serif section-title">22 deseos para ti</h2>
+      <p class="wishes-lead">Ahora me toca pedir 22 deseos para ti.</p>
+      <div class="wish-box">
+        <p class="wish-text" id="wishText">Que nunca te falten motivos para sonreír.</p>
+      </div>
+      <div class="wish-controls">
+        <span class="wish-count"><span id="wishCurrent">1</span> / 22</span>
+        <button class="btn btn-small" id="wishNext">Siguiente deseo →</button>
+      </div>
+      <button class="btn btn-ghost next-btn" id="toGallery" data-next="gallery" hidden>Continuar →</button>
+    </div>
+  </section>
+
+  <!-- 5. GALERÍA -->
+  <section id="gallery" class="screen" data-chapter="gallery">
+    <div class="screen-inner gallery-inner fade-in">
+      <p class="pre-label">momentos</p>
+      <h2 class="serif section-title">Algunos recuerdos</h2>
+      <div class="polaroid-row" id="polaroidRow"><!-- generado por JS --></div>
+      <button class="btn btn-ghost next-btn" data-next="letter">Continuar →</button>
+    </div>
+  </section>
+
+  <!-- 6. CARTA -->
+  <section id="letter" class="screen" data-chapter="letter">
+    <div class="screen-inner letter-inner fade-in">
+      <div class="petals" id="petals" aria-hidden="true"></div>
+      <div id="envelopeWrap" class="envelope-wrap">
+        <div class="envelope" id="envelope">
+          <span class="envelope-icon">💌</span>
+        </div>
+        <p class="pre-label">para ti</p>
+        <button class="btn btn-primary" id="openLetterBtn">Abrir carta</button>
+      </div>
+      <div class="letter-paper" id="letterPaper" hidden>
+        <p class="letter-body serif" id="letterBody"></p>
+        <button class="btn btn-ghost next-btn" id="toFinal" data-next="final" hidden>Continuar →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. FINAL -->
+  <section id="final" class="screen" data-chapter="final">
+    <div class="screen-inner final-inner fade-in">
+      <div class="final-flower" id="finalFlower" aria-hidden="true">
+        <span class="light-dot"></span>
+      </div>
+      <div class="big-number final-number">22</div>
+      <p class="final-message">
+        Que esta nueva vuelta al sol te encuentre rodeada de cosas bonitas,
+        personas que te quieran bien, sueños que se cumplan y muchísimos
+        motivos para sonreír.
+      </p>
+      <h2 class="serif final-title" id="finalTitle">Feliz cumpleaños</h2>
+      <p class="final-note">Espero que nunca olvides lo especial que eres. 🌷</p>
+      <button class="btn btn-text" id="restartBtn">Volver al principio</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- Confirmación de reinicio -->
+<div class="modal-overlay" id="restartModal" hidden>
+  <div class="modal-box">
+    <p class="serif modal-title">¿Otra vez?</p>
+    <p class="modal-copy">Entonces tendrás que volver a descubrirlo todo.</p>
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="restartYes">Sí</button>
+      <button class="btn btn-ghost" id="restartNo">No</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
