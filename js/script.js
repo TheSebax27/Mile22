@@ -3,7 +3,7 @@
    ========================================================= */
 const CONFIG = {
   name: "Nombre",
-  birthDate: null,
+  birthDate: "2004-08-31",
   turningAge: 22,
 
   things: [
