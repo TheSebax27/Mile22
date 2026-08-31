@@ -153,8 +153,47 @@ em{ font-style: italic; color: var(--rosa-oscuro); font-weight: 500; }
   0%, 100%{ transform: translateY(0) rotate(0deg); }
   50%{ transform: translateY(-16px) rotate(6deg); }
 }
+.deco-glyph.deco-twinkle{
+  animation: decoTwinkle 6s ease-in-out infinite;
+}
+@keyframes decoTwinkle{
+  0%, 100%{ transform: translateY(0) rotate(0deg) scale(1); opacity: var(--op-min, .18); }
+  50%{ transform: translateY(-18px) rotate(8deg) scale(1.2); opacity: var(--op-max, .6); }
+}
 @media (prefers-reduced-motion: reduce){
-  .deco-glyph{ animation: none; }
+  .deco-glyph.deco-twinkle{ animation: none; }
+}
+
+/* Resplandores ambientales de fondo (intro / final) */
+.ambient-glow{
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(60px);
+  opacity: .3;
+  animation: glowPulse 9s ease-in-out infinite;
+}
+.glow-1{
+  width: 300px; height: 300px;
+  top: -70px; left: -70px;
+  background: radial-gradient(circle, rgba(193,123,135,.6), transparent 70%);
+}
+.glow-2{
+  width: 340px; height: 340px;
+  bottom: -90px; right: -70px;
+  background: radial-gradient(circle, rgba(201,168,120,.45), transparent 70%);
+  animation-delay: 3s;
+}
+@keyframes glowPulse{
+  0%, 100%{ transform: scale(1); opacity: .26; }
+  50%{ transform: scale(1.18); opacity: .42; }
+}
+@media (prefers-reduced-motion: reduce){
+  .ambient-glow{ animation: none; }
+}
+@media (max-width: 480px){
+  .glow-1, .glow-2{ width: 190px; height: 190px; filter: blur(40px); }
 }
 
 /* =========================================================

@@ -317,10 +317,11 @@ document.getElementById("restartYes").addEventListener("click", () => {
   document.querySelectorAll(".screen[data-deco]").forEach(screen => {
     const kind = screen.dataset.deco;
     const glyphs = sets[kind] || sets.flowers;
-    const count = 6;
+    const count = kind === "stars" ? 16 : 6;
     for (let i = 0; i < count; i++){
       const el = document.createElement("span");
       el.className = "deco-glyph";
+      if (kind === "stars") el.classList.add("deco-twinkle");
       el.setAttribute("aria-hidden", "true");
       el.textContent = glyphs[i % glyphs.length];
       const size = (1 + Math.random() * 1.1).toFixed(2);
@@ -329,6 +330,10 @@ document.getElementById("restartYes").addEventListener("click", () => {
       el.style.top = (10 + Math.random() * 78) + "%";
       el.style.animationDelay = (Math.random() * 5).toFixed(1) + "s";
       el.style.animationDuration = (5 + Math.random() * 3).toFixed(1) + "s";
+      if (kind === "stars"){
+        el.style.setProperty("--op-min", (0.12 + Math.random() * 0.12).toFixed(2));
+        el.style.setProperty("--op-max", (0.45 + Math.random() * 0.3).toFixed(2));
+      }
       el.style.color = kind === "stars"
         ? "rgba(253,243,240,.6)"
         : "var(--rosa-oscuro)";
