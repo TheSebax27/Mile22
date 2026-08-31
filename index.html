@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Para ti — 22</title>
 <meta name="description" content="Una experiencia de cumpleaños, hecha para una persona muy especial.">
+<link rel="icon" href="icons/icon1.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -22,21 +23,20 @@
 <audio id="birthdayMusic" loop preload="none">
   <source src="assets/music/song.mp3" type="audio/mpeg">
 </audio>
-<button id="musicToggle" class="music-player" aria-label="Reproducir música" aria-pressed="false">
-  <span class="music-icon">♫</span>
-  <span class="music-bars" aria-hidden="true"><i></i><i></i><i></i></span>
-</button>
 
-<!-- Barra de progreso general de capítulos -->
-<nav class="chapter-dots" aria-label="Progreso de la experiencia">
-  <button data-go="intro" class="dot active" aria-label="Introducción"></button>
-  <button data-go="birthday" class="dot" aria-label="Cumpleaños"></button>
-  <button data-go="things" class="dot" aria-label="22 razones"></button>
-  <button data-go="wishes" class="dot" aria-label="22 deseos"></button>
-  <button data-go="gallery" class="dot" aria-label="Galería"></button>
-  <button data-go="letter" class="dot" aria-label="Carta"></button>
-  <button data-go="final" class="dot" aria-label="Final"></button>
-</nav>
+<!-- Barra de navegación superior -->
+<header class="site-nav">
+  <button class="nav-logo" data-go="intro">♡ Para ti</button>
+  <nav class="nav-links" aria-label="Secciones">
+    <button data-go="intro" class="nav-link active">Inicio</button>
+    <button data-go="things" class="nav-link">22 razones</button>
+    <button data-go="gallery" class="nav-link">Momentos</button>
+    <button data-go="letter" class="nav-link">Una carta</button>
+  </nav>
+  <button id="musicToggle" class="music-pill" aria-label="Reproducir música" aria-pressed="false">
+    <span class="music-icon">♪</span><span class="music-pill-label">Música</span>
+  </button>
+</header>
 
 <main id="app">
 
@@ -45,7 +45,7 @@
     <div class="intro-stars" aria-hidden="true"></div>
     <div class="screen-inner intro-inner fade-in">
       <p class="pre-label">para una persona muy especial</p>
-      <h1 class="serif intro-title">Tengo algo<br>preparado para ti</h1>
+      <h1 class="serif intro-title">Tengo algo<br>preparado para <em>ti</em></h1>
       <p class="intro-sub">No es un regalo que puedas envolver,<br>pero espero que te guste.</p>
       <button class="btn btn-primary" id="startBtn">Abrir mi regalo</button>
     </div>
@@ -75,7 +75,7 @@
   <section id="things" class="screen" data-chapter="things">
     <div class="screen-inner things-inner fade-in">
       <p class="pre-label">22 razones, entre muchas otras</p>
-      <h2 class="serif section-title">Cosas que te hacen tú</h2>
+      <h2 class="serif section-title">Cosas que te hacen <em>tú</em></h2>
 
       <div class="progress-track" aria-hidden="true">
         <div class="progress-fill" id="thingsProgress"></div>
@@ -124,7 +124,7 @@
   <section id="gallery" class="screen" data-chapter="gallery">
     <div class="screen-inner gallery-inner fade-in">
       <p class="pre-label">momentos</p>
-      <h2 class="serif section-title">Algunos recuerdos</h2>
+      <h2 class="serif section-title">Pequeñas partes de <em>grandes recuerdos</em></h2>
       <div class="polaroid-row" id="polaroidRow"><!-- generado por JS --></div>
       <button class="btn btn-ghost next-btn" data-next="letter">Continuar →</button>
     </div>
@@ -135,10 +135,12 @@
     <div class="screen-inner letter-inner fade-in">
       <div class="petals" id="petals" aria-hidden="true"></div>
       <div id="envelopeWrap" class="envelope-wrap">
+        <p class="pre-label">una carta para ti</p>
         <div class="envelope" id="envelope">
-          <span class="envelope-icon">💌</span>
+          <div class="envelope-body">
+            <span class="envelope-seal">🌷</span>
+          </div>
         </div>
-        <p class="pre-label">para ti</p>
         <button class="btn btn-primary" id="openLetterBtn">Abrir carta</button>
       </div>
       <div class="letter-paper" id="letterPaper" hidden>
@@ -151,6 +153,7 @@
   <!-- 7. FINAL -->
   <section id="final" class="screen" data-chapter="final">
     <div class="screen-inner final-inner fade-in">
+      <p class="pre-label final-pre">para terminar</p>
       <div class="final-flower" id="finalFlower" aria-hidden="true">
         <span class="light-dot"></span>
       </div>
@@ -167,6 +170,23 @@
   </section>
 
 </main>
+
+<!-- Reproductor persistente -->
+<footer class="player-bar" id="playerBar" hidden>
+  <div class="player-info">
+    <span class="player-avatar">🎵</span>
+    <div class="player-text">
+      <p class="player-title" id="playerTitle">Nuestra canción</p>
+      <p class="player-artist" id="playerArtist">Toca para reproducir</p>
+    </div>
+  </div>
+  <button class="player-btn" id="playerPlayPause" aria-label="Reproducir">▶</button>
+  <div class="player-progress">
+    <span id="playerTime">0:00</span>
+    <div class="progress-bar"><div class="progress-bar-fill" id="playerFill"></div></div>
+    <span id="playerDuration">0:00</span>
+  </div>
+</footer>
 
 <!-- Confirmación de reinicio -->
 <div class="modal-overlay" id="restartModal" hidden>

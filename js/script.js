@@ -2,11 +2,12 @@
    CONFIGURACIÓN — edita solo esta parte para personalizar
    ========================================================= */
 const CONFIG = {
-  name: "Nombre",              // Se usa en el título final: "Feliz cumpleaños, {name}"
-  birthDate: null,             // Ej: "2004-08-30" para activar el contador de días/horas. Deja null para ocultarlo.
+  name: "Nombre",
+  birthDate: null,
   turningAge: 22,
+  songTitle: "Nuestra canción",
+  songArtist: "Toca para reproducir",
 
-  // Las 22 razones. Cambia el texto, el orden o agrega las tuyas.
   things: [
     { title: "Tu sonrisa", text: "Porque tienes una de esas sonrisas que pueden cambiar completamente el ambiente de un momento." },
     { title: "Tu mirada", text: "Hay algo especial en tu forma de mirar, de esas cosas que probablemente tú ni siquiera notas, pero que alguien más puede recordar durante mucho tiempo." },
@@ -32,7 +33,6 @@ const CONFIG = {
     { title: "Simplemente tú", text: "Y si tuviera que elegir solamente una cosa, elegiría esta: que seas tú. Porque no necesitas convertirte en alguien diferente para ser especial." }
   ],
 
-  // Los 22 deseos.
   wishes: [
     "Que nunca te falten motivos para sonreír.",
     "Que encuentres personas que sepan valorarte.",
@@ -58,16 +58,14 @@ const CONFIG = {
     "Que seas muy feliz."
   ],
 
-  // Fotos: pon tus archivos en assets/fotos/ y ajusta esta lista.
-  // Si el archivo no existe, se muestra un marco vacío en su lugar (no rompe la página).
+  // 4 fotos, servidas desde icons/
   photos: [
-    { src: "assets/fotos/foto1.jpg", caption: "Porque hay momentos que merecen quedarse." },
-    { src: "assets/fotos/foto2.jpg", caption: "Una sonrisa demasiado bonita para no guardarla." },
-    { src: "assets/fotos/foto3.jpg", caption: "De esas fotos que simplemente hacen sonreír." },
-    { src: "assets/fotos/foto4.jpg", caption: "Una pequeña parte de alguien increíble." }
+    { src: "icons/image1.png", caption: "Porque hay momentos que merecen quedarse." },
+    { src: "icons/image2.png", caption: "Una sonrisa demasiado bonita para no guardarla." },
+    { src: "icons/image3.png", caption: "De esas fotos que simplemente hacen sonreír." },
+    { src: "icons/image4.png", caption: "Una pequeña parte de alguien increíble." }
   ],
 
-  // Carta final. Se escribe con efecto máquina de escribir.
   letter: `Para una niña muy bonita que hoy cumple 22...
 
 Hoy quiero que sepas, aunque sea por un momento, todo lo que representas para quienes te rodean. No es solo un cumpleaños más: es un año entero de aprender, de crecer, de reír y también de sostenerte en los días difíciles.
@@ -80,9 +78,16 @@ Feliz cumpleaños.`
 };
 
 /* =========================================================
-   ESTADO Y NAVEGACIÓN ENTRE CAPÍTULOS
+   NAVEGACIÓN ENTRE CAPÍTULOS
    ========================================================= */
 const chapters = ["intro", "birthday", "things", "wishes", "gallery", "letter", "final"];
+// Cada capítulo se asocia al link de nav más cercano (Inicio / 22 razones / Momentos / Una carta)
+const navMap = {
+  intro: "intro", birthday: "intro",
+  things: "things",
+  wishes: "gallery", gallery: "gallery",
+  letter: "letter", final: "letter"
+};
 let currentChapter = 0;
 
 function goToChapter(id){
@@ -91,9 +96,10 @@ function goToChapter(id){
   currentChapter = idx;
 
   document.querySelectorAll(".screen").forEach(s => s.classList.toggle("active", s.id === id));
-  document.querySelectorAll(".dot").forEach(d => d.classList.toggle("active", d.dataset.go === id));
+  document.querySelectorAll(".nav-link").forEach(link => {
+    link.classList.toggle("active", link.dataset.go === navMap[id]);
+  });
 
-  // Reinicia animaciones de entrada
   const active = document.getElementById(id);
   active.querySelectorAll(".fade-in").forEach(el => {
     el.style.animation = "none";
@@ -105,8 +111,8 @@ function goToChapter(id){
 document.querySelectorAll("[data-next]").forEach(btn => {
   btn.addEventListener("click", () => goToChapter(btn.dataset.next));
 });
-document.querySelectorAll(".dot").forEach(dot => {
-  dot.addEventListener("click", () => goToChapter(dot.dataset.go));
+document.querySelectorAll(".nav-link, .nav-logo").forEach(btn => {
+  btn.addEventListener("click", () => goToChapter(btn.dataset.go));
 });
 
 /* =========================================================
@@ -119,7 +125,7 @@ document.getElementById("startBtn").addEventListener("click", () => {
 });
 
 /* =========================================================
-   CONTADOR DE DÍAS / HORAS (solo si hay birthDate)
+   CONTADOR DE DÍAS / HORAS
    ========================================================= */
 function setupCounter(){
   document.getElementById("bigNumber").textContent = CONFIG.turningAge;
@@ -155,11 +161,7 @@ function renderThing(){
   void card.offsetWidth;
   card.style.animation = "";
 
-  const isLast = thingIndex === totalThings - 1;
-  document.getElementById("cardNext").disabled = false;
-  document.getElementById("thingsEnd").hidden = !isLast ? true : false;
-  if (isLast) document.getElementById("thingsEnd").hidden = false;
-  else document.getElementById("thingsEnd").hidden = true;
+  document.getElementById("thingsEnd").hidden = thingIndex !== totalThings - 1;
 }
 
 document.getElementById("cardNext").addEventListener("click", () => {
@@ -179,7 +181,6 @@ document.getElementById("cardPrev").addEventListener("click", () => {
 });
 renderThing();
 
-/* Navegación por teclado dentro de "things" */
 document.addEventListener("keydown", (e) => {
   if (!document.getElementById("things").classList.contains("active")) return;
   if (e.key === "ArrowRight") document.getElementById("cardNext").click();
@@ -307,7 +308,6 @@ function renderFinal(){
 }
 renderFinal();
 
-/* Reinicio con confirmación */
 const restartModal = document.getElementById("restartModal");
 document.getElementById("restartBtn").addEventListener("click", () => restartModal.hidden = false);
 document.getElementById("restartNo").addEventListener("click", () => restartModal.hidden = true);
@@ -317,28 +317,61 @@ document.getElementById("restartYes").addEventListener("click", () => {
 });
 
 /* =========================================================
-   MÚSICA
+   MÚSICA (nav pill + barra inferior sincronizadas)
    ========================================================= */
 const audio = document.getElementById("birthdayMusic");
 const musicBtn = document.getElementById("musicToggle");
+const playerBar = document.getElementById("playerBar");
+const playerPlayPause = document.getElementById("playerPlayPause");
+const playerFill = document.getElementById("playerFill");
+const playerTime = document.getElementById("playerTime");
+const playerDuration = document.getElementById("playerDuration");
+
+document.getElementById("playerTitle").textContent = CONFIG.songTitle;
+document.getElementById("playerArtist").textContent = CONFIG.songArtist;
+
+function formatTime(s){
+  if (!isFinite(s)) return "0:00";
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60).toString().padStart(2, "0");
+  return `${m}:${sec}`;
+}
+
+function updateMusicUI(playing){
+  musicBtn.setAttribute("aria-pressed", playing ? "true" : "false");
+  playerPlayPause.textContent = playing ? "❚❚" : "▶";
+  playerPlayPause.setAttribute("aria-label", playing ? "Pausar" : "Reproducir");
+}
 
 function startMusic(){
+  playerBar.hidden = false;
   audio.volume = 0.55;
-  audio.play().then(() => {
-    musicBtn.setAttribute("aria-pressed", "true");
-  }).catch(() => { /* el navegador puede bloquearlo; el botón sigue disponible */ });
+  audio.play().then(() => updateMusicUI(true)).catch(() => updateMusicUI(false));
 }
-musicBtn.addEventListener("click", () => {
+
+function toggleMusic(){
+  playerBar.hidden = false;
   if (audio.paused){
-    audio.play().then(() => musicBtn.setAttribute("aria-pressed", "true")).catch(() => {});
+    audio.play().then(() => updateMusicUI(true)).catch(() => updateMusicUI(false));
   } else {
     audio.pause();
-    musicBtn.setAttribute("aria-pressed", "false");
+    updateMusicUI(false);
   }
+}
+musicBtn.addEventListener("click", toggleMusic);
+playerPlayPause.addEventListener("click", toggleMusic);
+
+audio.addEventListener("timeupdate", () => {
+  if (!audio.duration) return;
+  playerFill.style.width = (audio.currentTime / audio.duration * 100) + "%";
+  playerTime.textContent = formatTime(audio.currentTime);
+});
+audio.addEventListener("loadedmetadata", () => {
+  playerDuration.textContent = formatTime(audio.duration);
 });
 
 /* =========================================================
-   ESTRELLAS DE FONDO (canvas, sutil)
+   ESTRELLAS DE FONDO
    ========================================================= */
 (function stars(){
   const canvas = document.getElementById("bg-canvas");
@@ -363,7 +396,7 @@ musicBtn.addEventListener("click", () => {
   }
   function draw(){
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = "#F8F3EE";
+    ctx.fillStyle = "#FDF3F0";
     particles.forEach(p => {
       ctx.globalAlpha = p.o;
       ctx.beginPath();
@@ -383,12 +416,12 @@ musicBtn.addEventListener("click", () => {
 })();
 
 /* =========================================================
-   ESTELA DEL CURSOR (sutil, con throttle)
+   ESTELA DEL CURSOR
    ========================================================= */
 (function cursorTrail(){
   const trail = document.getElementById("cursor-trail");
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  if (window.matchMedia("(pointer: coarse)").matches) return; // evita en touch
+  if (window.matchMedia("(pointer: coarse)").matches) return;
 
   let last = 0;
   window.addEventListener("mousemove", (e) => {
@@ -410,7 +443,7 @@ musicBtn.addEventListener("click", () => {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   setInterval(() => {
-    if (currentChapter === 0) return; // no en la intro
+    if (currentChapter === 0) return;
     const heart = document.createElement("span");
     heart.className = "floating-heart";
     heart.textContent = "♡";
