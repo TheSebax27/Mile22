@@ -19,11 +19,6 @@
 <!-- Estela del cursor -->
 <div id="cursor-trail" aria-hidden="true"></div>
 
-<!-- Reproductor de música -->
-<audio id="birthdayMusic" loop preload="none">
-  <source src="assets/music/song.mp3" type="audio/mpeg">
-</audio>
-
 <!-- Barra de navegación superior -->
 <header class="site-nav">
   <button class="nav-logo" data-go="intro">♡ Para ti</button>
@@ -33,16 +28,12 @@
     <button data-go="gallery" class="nav-link">Momentos</button>
     <button data-go="letter" class="nav-link">Una carta</button>
   </nav>
-  <button id="musicToggle" class="music-pill" aria-label="Reproducir música" aria-pressed="false">
-    <span class="music-icon">♪</span><span class="music-pill-label">Música</span>
-  </button>
 </header>
 
 <main id="app">
 
   <!-- 1. INTRO -->
-  <section id="intro" class="screen active" data-chapter="intro">
-    <div class="intro-stars" aria-hidden="true"></div>
+  <section id="intro" class="screen active" data-chapter="intro" data-deco="stars">
     <div class="screen-inner intro-inner fade-in">
       <p class="pre-label">para una persona muy especial</p>
       <h1 class="serif intro-title">Tengo algo<br>preparado para <em>ti</em></h1>
@@ -52,7 +43,7 @@
   </section>
 
   <!-- 2. CUMPLEAÑOS -->
-  <section id="birthday" class="screen" data-chapter="birthday">
+  <section id="birthday" class="screen" data-chapter="birthday" data-deco="flowers">
     <div class="screen-inner fade-in">
       <p class="pre-label">hoy es el día</p>
       <h2 class="serif birthday-lead">Hoy alguien muy especial cumple</h2>
@@ -72,7 +63,7 @@
   </section>
 
   <!-- 3. 22 COSAS -->
-  <section id="things" class="screen" data-chapter="things">
+  <section id="things" class="screen" data-chapter="things" data-deco="flowers">
     <div class="screen-inner things-inner fade-in">
       <p class="pre-label">22 razones, entre muchas otras</p>
       <h2 class="serif section-title">Cosas que te hacen <em>tú</em></h2>
@@ -104,7 +95,7 @@
   </section>
 
   <!-- 4. 22 DESEOS -->
-  <section id="wishes" class="screen" data-chapter="wishes">
+  <section id="wishes" class="screen" data-chapter="wishes" data-deco="flowers">
     <div class="screen-inner fade-in">
       <p class="pre-label">y ahora, algo para ti</p>
       <h2 class="serif section-title">22 deseos para ti</h2>
@@ -121,7 +112,7 @@
   </section>
 
   <!-- 5. GALERÍA -->
-  <section id="gallery" class="screen" data-chapter="gallery">
+  <section id="gallery" class="screen" data-chapter="gallery" data-deco="flowers">
     <div class="screen-inner gallery-inner fade-in">
       <p class="pre-label">momentos</p>
       <h2 class="serif section-title">Pequeñas partes de <em>grandes recuerdos</em></h2>
@@ -131,7 +122,7 @@
   </section>
 
   <!-- 6. CARTA -->
-  <section id="letter" class="screen" data-chapter="letter">
+  <section id="letter" class="screen" data-chapter="letter" data-deco="flowers">
     <div class="screen-inner letter-inner fade-in">
       <div class="petals" id="petals" aria-hidden="true"></div>
       <div id="envelopeWrap" class="envelope-wrap">
@@ -151,7 +142,7 @@
   </section>
 
   <!-- 7. FINAL -->
-  <section id="final" class="screen" data-chapter="final">
+  <section id="final" class="screen" data-chapter="final" data-deco="stars">
     <div class="screen-inner final-inner fade-in">
       <p class="pre-label final-pre">para terminar</p>
       <div class="final-flower" id="finalFlower" aria-hidden="true">
@@ -170,23 +161,6 @@
   </section>
 
 </main>
-
-<!-- Reproductor persistente -->
-<footer class="player-bar" id="playerBar" hidden>
-  <div class="player-info">
-    <span class="player-avatar">🎵</span>
-    <div class="player-text">
-      <p class="player-title" id="playerTitle">Nuestra canción</p>
-      <p class="player-artist" id="playerArtist">Toca para reproducir</p>
-    </div>
-  </div>
-  <button class="player-btn" id="playerPlayPause" aria-label="Reproducir">▶</button>
-  <div class="player-progress">
-    <span id="playerTime">0:00</span>
-    <div class="progress-bar"><div class="progress-bar-fill" id="playerFill"></div></div>
-    <span id="playerDuration">0:00</span>
-  </div>
-</footer>
 
 <!-- Confirmación de reinicio -->
 <div class="modal-overlay" id="restartModal" hidden>

@@ -5,8 +5,6 @@ const CONFIG = {
   name: "Nombre",
   birthDate: null,
   turningAge: 22,
-  songTitle: "Nuestra canción",
-  songArtist: "Toca para reproducir",
 
   things: [
     { title: "Tu sonrisa", text: "Porque tienes una de esas sonrisas que pueden cambiar completamente el ambiente de un momento." },
@@ -58,7 +56,6 @@ const CONFIG = {
     "Que seas muy feliz."
   ],
 
-  // 4 fotos, servidas desde icons/
   photos: [
     { src: "icons/image1.png", caption: "Porque hay momentos que merecen quedarse." },
     { src: "icons/image2.png", caption: "Una sonrisa demasiado bonita para no guardarla." },
@@ -81,7 +78,6 @@ Feliz cumpleaños.`
    NAVEGACIÓN ENTRE CAPÍTULOS
    ========================================================= */
 const chapters = ["intro", "birthday", "things", "wishes", "gallery", "letter", "final"];
-// Cada capítulo se asocia al link de nav más cercano (Inicio / 22 razones / Momentos / Una carta)
 const navMap = {
   intro: "intro", birthday: "intro",
   things: "things",
@@ -115,14 +111,7 @@ document.querySelectorAll(".nav-link, .nav-logo").forEach(btn => {
   btn.addEventListener("click", () => goToChapter(btn.dataset.go));
 });
 
-/* =========================================================
-   INTRO → INICIO DE LA EXPERIENCIA
-   ========================================================= */
-document.getElementById("startBtn").addEventListener("click", () => {
-  goToChapter("birthday");
-  startMusic();
-  document.getElementById("bg-canvas").classList.add("visible");
-});
+document.getElementById("startBtn").addEventListener("click", () => goToChapter("birthday"));
 
 /* =========================================================
    CONTADOR DE DÍAS / HORAS
@@ -317,61 +306,39 @@ document.getElementById("restartYes").addEventListener("click", () => {
 });
 
 /* =========================================================
-   MÚSICA (nav pill + barra inferior sincronizadas)
+   DECORACIÓN FLOTANTE POR PANTALLA
+   (rellena visualmente cada sección sin sobrecargarla)
    ========================================================= */
-const audio = document.getElementById("birthdayMusic");
-const musicBtn = document.getElementById("musicToggle");
-const playerBar = document.getElementById("playerBar");
-const playerPlayPause = document.getElementById("playerPlayPause");
-const playerFill = document.getElementById("playerFill");
-const playerTime = document.getElementById("playerTime");
-const playerDuration = document.getElementById("playerDuration");
-
-document.getElementById("playerTitle").textContent = CONFIG.songTitle;
-document.getElementById("playerArtist").textContent = CONFIG.songArtist;
-
-function formatTime(s){
-  if (!isFinite(s)) return "0:00";
-  const m = Math.floor(s / 60);
-  const sec = Math.floor(s % 60).toString().padStart(2, "0");
-  return `${m}:${sec}`;
-}
-
-function updateMusicUI(playing){
-  musicBtn.setAttribute("aria-pressed", playing ? "true" : "false");
-  playerPlayPause.textContent = playing ? "❚❚" : "▶";
-  playerPlayPause.setAttribute("aria-label", playing ? "Pausar" : "Reproducir");
-}
-
-function startMusic(){
-  playerBar.hidden = false;
-  audio.volume = 0.55;
-  audio.play().then(() => updateMusicUI(true)).catch(() => updateMusicUI(false));
-}
-
-function toggleMusic(){
-  playerBar.hidden = false;
-  if (audio.paused){
-    audio.play().then(() => updateMusicUI(true)).catch(() => updateMusicUI(false));
-  } else {
-    audio.pause();
-    updateMusicUI(false);
-  }
-}
-musicBtn.addEventListener("click", toggleMusic);
-playerPlayPause.addEventListener("click", toggleMusic);
-
-audio.addEventListener("timeupdate", () => {
-  if (!audio.duration) return;
-  playerFill.style.width = (audio.currentTime / audio.duration * 100) + "%";
-  playerTime.textContent = formatTime(audio.currentTime);
-});
-audio.addEventListener("loadedmetadata", () => {
-  playerDuration.textContent = formatTime(audio.duration);
-});
+(function addDecor(){
+  const sets = {
+    stars: ["✦", "✧", "⋆"],
+    flowers: ["🌷", "🌸", "✦"]
+  };
+  document.querySelectorAll(".screen[data-deco]").forEach(screen => {
+    const kind = screen.dataset.deco;
+    const glyphs = sets[kind] || sets.flowers;
+    const count = 6;
+    for (let i = 0; i < count; i++){
+      const el = document.createElement("span");
+      el.className = "deco-glyph";
+      el.setAttribute("aria-hidden", "true");
+      el.textContent = glyphs[i % glyphs.length];
+      const size = (1 + Math.random() * 1.1).toFixed(2);
+      el.style.fontSize = size + "rem";
+      el.style.left = (5 + Math.random() * 85) + "%";
+      el.style.top = (10 + Math.random() * 78) + "%";
+      el.style.animationDelay = (Math.random() * 5).toFixed(1) + "s";
+      el.style.animationDuration = (5 + Math.random() * 3).toFixed(1) + "s";
+      el.style.color = kind === "stars"
+        ? "rgba(253,243,240,.6)"
+        : "var(--rosa-oscuro)";
+      screen.appendChild(el);
+    }
+  });
+})();
 
 /* =========================================================
-   ESTRELLAS DE FONDO
+   ESTRELLAS DE FONDO (canvas, visibles desde el inicio)
    ========================================================= */
 (function stars(){
   const canvas = document.getElementById("bg-canvas");
