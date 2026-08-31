@@ -18,7 +18,7 @@
   --dur-med: .6s;
   --dur-slow: 1.2s;
   --ease: cubic-bezier(.22,.61,.36,1);
-  --nav-h: 60px;
+  --nav-h: 0px;
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -69,64 +69,24 @@ em{ font-style: italic; color: var(--rosa-oscuro); font-weight: 500; }
 }
 
 /* =========================================================
-   TOP NAV
+   FLORES DE FONDO (imagen decorativa fija, detrás del contenido)
    ========================================================= */
-.site-nav{
+.bg-flower{
   position: fixed;
-  top: 0; left: 0; right: 0;
-  height: var(--nav-h);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 clamp(1rem, 4vw, 2.4rem);
-  background: rgba(253,243,240,.82);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(139,74,85,.1);
+  z-index: 1;
+  pointer-events: none;
+  width: clamp(150px, 22vw, 280px);
+  opacity: .2;
+  filter: saturate(.95);
+  transition: opacity var(--dur-slow) var(--ease);
 }
-.nav-logo{
-  background: none;
-  border: none;
-  font-family: var(--serif);
-  font-size: 1.1rem;
-  color: var(--grafito);
-  flex-shrink: 0;
-}
-.nav-links{
-  display: flex;
-  gap: clamp(.9rem, 2.5vw, 1.8rem);
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.nav-links::-webkit-scrollbar{ display: none; }
-.nav-link{
-  background: none;
-  border: none;
-  font-size: .82rem;
-  color: rgba(43,34,38,.55);
-  white-space: nowrap;
-  padding: .3rem 0;
-  position: relative;
-  transition: color var(--dur-fast) var(--ease);
-  flex-shrink: 0;
-}
-.nav-link::after{
-  content: "";
-  position: absolute;
-  left: 0; right: 0; bottom: -2px;
-  height: 1px;
-  background: var(--rosa-oscuro);
-  transform: scaleX(0);
-  transition: transform var(--dur-fast) var(--ease);
-}
-.nav-link.active{ color: var(--grafito); }
-.nav-link.active::after{ transform: scaleX(1); }
+.bg-flower-tl{ top: -34px; left: -34px; transform: rotate(-10deg); }
+.bg-flower-br{ bottom: -46px; right: -34px; transform: rotate(8deg) scaleX(-1); }
 
 @media (max-width: 480px){
-  .nav-logo span{ display: none; }
-  .nav-links{ gap: .8rem; }
-  .nav-link{ font-size: .76rem; }
+  .bg-flower{ width: 128px; opacity: .16; }
+  .bg-flower-tl{ top: -24px; left: -26px; }
+  .bg-flower-br{ bottom: -30px; right: -26px; }
 }
 
 /* =========================================================
