@@ -450,6 +450,9 @@ img{ max-width: 100%; display: block; }
   justify-content: center;
   z-index: 200;
 }
+.modal-overlay[hidden]{
+  display: none;
+}
 .modal-box{
   background: var(--crema);
   border-radius: 16px;
